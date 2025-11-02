@@ -4,20 +4,28 @@ import api from "../api/axios";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import type { RootState } from "../app/store";
 
-async function fetchRooms() {
-  const { data } = await api.get("/rooms");
+interface Room {
+  _id: string;
+  name: string;
+  description: string;
+  price: number;
+}
+
+async function fetchRooms(): Promise<Room[]> {
+  const { data } = await api.get<Room[]>("/rooms");
   return data;
 }
 
-export default function Rooms() {
+const Rooms: React.FC = () => {
   const { t } = useTranslation();
-  const { data: rooms, isLoading } = useQuery("rooms", fetchRooms);
-  const auth = useSelector((s) => s.auth);
+  const { data: rooms, isLoading } = useQuery<Room[]>("rooms", fetchRooms);
+  const auth = useSelector((state: RootState) => state.auth);
   const qc = useQueryClient();
 
   const del = useMutation(
-    async (id) => {
+    async (id: string) => {
       await api.delete(`/rooms/${id}`);
     },
     { onSuccess: () => qc.invalidateQueries("rooms") }
@@ -73,4 +81,6 @@ export default function Rooms() {
       </div>
     </div>
   );
-}
+};
+
+export default Rooms;

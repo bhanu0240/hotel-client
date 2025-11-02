@@ -2,17 +2,24 @@ import React from "react";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 import api from "../api/axios";
 
-async function fetchBookings() {
-  const { data } = await api.get("/bookings/my");
+interface Booking {
+  _id: string;
+  room?: { name: string };
+  from: string;
+  to: string;
+}
+
+async function fetchBookings(): Promise<Booking[]> {
+  const { data } = await api.get<Booking[]>("/bookings/my");
   return data;
 }
 
-export default function Bookings() {
+const Bookings: React.FC = () => {
   const qc = useQueryClient();
-  const { data: bookings, isLoading } = useQuery("myBookings", fetchBookings);
+  const { data: bookings, isLoading } = useQuery<Booking[]>("myBookings", fetchBookings);
 
   const cancel = useMutation(
-    async (id) => {
+    async (id: string) => {
       await api.delete(`/bookings/${id}`);
     },
     { onSuccess: () => qc.invalidateQueries("myBookings") }
@@ -49,4 +56,6 @@ export default function Bookings() {
       </div>
     </div>
   );
-}
+};
+
+export default Bookings;

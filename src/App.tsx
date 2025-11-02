@@ -7,7 +7,7 @@ import Bookings from "./pages/Bookings";
 import Login from "./pages/Login";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-export default function App() {
+const App: React.FC = () => {
   return (
     <div className="min-h-screen">
       <Header />
@@ -44,4 +44,6 @@ export default function App() {
       </main>
     </div>
   );
-}
+};
+
+export default App;

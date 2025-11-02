@@ -4,23 +4,34 @@ import api from "../api/axios";
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery, useMutation, useQueryClient } from "react-query";
 
-export default function RoomForm({ editMode }) {
+interface Room {
+  _id?: string;
+  name: string;
+  description: string;
+  price: number;
+}
+
+interface RoomFormProps {
+  editMode?: boolean;
+}
+
+const RoomForm: React.FC<RoomFormProps> = ({ editMode }) => {
   const nav = useNavigate();
   const qc = useQueryClient();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
 
-  const { data: room } = useQuery(
+  const { data: room } = useQuery<Room | null>(
     ["room", id],
     async () => {
       if (!editMode || !id) return null;
-      const { data } = await api.get(`/rooms/${id}`);
+      const { data } = await api.get<Room>(`/rooms/${id}`);
       return data;
     },
     { enabled: !!editMode }
   );
 
   const save = useMutation(
-    async (vals) => {
+    async (vals: Room) => {
       if (editMode) {
         await api.put(`/rooms/${id}`, vals);
       } else {
@@ -79,4 +90,6 @@ export default function RoomForm({ editMode }) {
       </Formik>
     </div>
   );
-}
+};
+
+export default RoomForm;

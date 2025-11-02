@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+const Login: React.FC = () => {
   const dispatch = useDispatch();
   const nav = useNavigate();
 
@@ -17,7 +17,6 @@ export default function Login() {
         onSubmit={async (vals, { setSubmitting, setErrors }) => {
           try {
             const { data } = await api.post("/auth/login", vals);
-            // Expect { token, user }
             dispatch(setCredentials({ user: data.user, token: data.token }));
             nav("/");
           } catch (e) {
@@ -50,4 +49,6 @@ export default function Login() {
       </Formik>
     </div>
   );
-}
+};
+
+export default Login;

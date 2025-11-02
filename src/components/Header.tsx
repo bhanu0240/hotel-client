@@ -3,10 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../features/auth/authSlice";
 import { useTranslation } from "react-i18next";
+import type { RootState } from "../app/store";
 
-export default function Header() {
+const Header: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const auth = useSelector((s) => s.auth);
+  const auth = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
   const nav = useNavigate();
 
@@ -62,4 +63,6 @@ export default function Header() {
       </div>
     </header>
   );
-}
+};
+
+export default Header;
