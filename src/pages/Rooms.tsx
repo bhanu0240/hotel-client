@@ -55,7 +55,7 @@ const Rooms: React.FC = () => {
                   to="/login"
                   className="bg-blue-600 text-white px-3 py-1 rounded"
                 >
-                  {t("login")}
+                  {t("login_to_book")}
                 </Link>
               )}
 
