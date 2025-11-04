@@ -17,7 +17,7 @@ const Login: React.FC = () => {
         onSubmit={async (vals, { setSubmitting, setErrors }) => {
           try {
             const { data } = await api.post("/auth/login", vals);
-            dispatch(setCredentials({ user: data.user, token: data.token }));
+            dispatch(setCredentials({ user: { name: data.name, email: data.email, role: data.role }, token: data.token }));
             nav("/");
           } catch (e) {
             setErrors({ email: "Invalid credentials" });
