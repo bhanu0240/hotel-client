@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import api from "../../api/axios";
 
 export interface User {
   name: string;
@@ -16,6 +17,21 @@ const initialState: AuthState = {
   token: null,
 };
 
+// Async thunk for logout
+export const logoutUser = createAsyncThunk(
+  "auth/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      await api.post("/auth/logout");
+      return;
+    } catch (error: any) {
+      // Even if API call fails, we'll still logout the user locally
+      console.error("Logout API error:", error);
+      return rejectWithValue(error.response?.data || "Logout failed");
+    }
+  }
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -32,6 +48,17 @@ const authSlice = createSlice({
       state.user = null;
       state.token = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder.addCase(logoutUser.fulfilled, (state) => {
+      state.user = null;
+      state.token = null;
+    });
+    builder.addCase(logoutUser.rejected, (state) => {
+      // Clear state even if API call fails
+      state.user = null;
+      state.token = null;
+    });
   },
 });
 

@@ -1,18 +1,19 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../features/auth/authSlice";
+import { logoutUser } from "../features/auth/authSlice";
 import { useTranslation } from "react-i18next";
 import type { RootState } from "../app/store";
+import type { AppDispatch } from "../app/store";
 
 const Header: React.FC = () => {
   const { t, i18n } = useTranslation();
   const auth = useSelector((state: RootState) => state.auth);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const nav = useNavigate();
 
-  function handleLogout() {
-    dispatch(logout());
+  async function handleLogout() {
+    await dispatch(logoutUser());
     nav("/");
   }
 
