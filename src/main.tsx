@@ -3,10 +3,16 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { registerSW } from "virtual:pwa-register";
 import App from "./App";
 import store from "./app/store";
 import "./index.css";
 import "./i18n";
+
+const updateSW = registerSW({
+  onNeedRefresh() {},
+  onOfflineReady() {},
+});
 
 const queryClient = new QueryClient();
 
