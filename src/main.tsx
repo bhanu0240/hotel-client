@@ -10,8 +10,21 @@ import "./index.css";
 import "./i18n";
 
 const updateSW = registerSW({
-  onNeedRefresh() {},
-  onOfflineReady() {},
+  onNeedRefresh() {
+    if (confirm("New version available! Click OK to update.")) {
+      updateSW(true);
+    }
+  },
+  onOfflineReady() {
+    console.log("App ready to work offline!");
+    // Optional: Show a subtle notification
+    if ("Notification" in window && Notification.permission === "granted") {
+      new Notification("Destination Bir", {
+        body: "App is ready to work offline!",
+        icon: "/favicon-96x96.png",
+      });
+    }
+  },
 });
 
 const queryClient = new QueryClient();

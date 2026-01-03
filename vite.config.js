@@ -8,6 +8,7 @@ export default defineConfig({
 
     VitePWA({
       registerType: "autoUpdate",
+      devOptions: { enabled: true },
       includeAssets: [
         "favicon.ico",
         "favicon-96x96.png",
@@ -24,6 +25,8 @@ export default defineConfig({
         background_color: "#ffffff",
         display: "standalone",
         start_url: "/",
+        scope: "/",
+        id: "/",
         icons: [
           {
             src: "/web-app-manifest-192x192.png",
@@ -53,6 +56,9 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,png,svg,ico,json, woff,woff2}"],
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
         runtimeCaching: [
           {
             urlPattern: /^https:\/\/your-api-domain\.com\/.*$/,
